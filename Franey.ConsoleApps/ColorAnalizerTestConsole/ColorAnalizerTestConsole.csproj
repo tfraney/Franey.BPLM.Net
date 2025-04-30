@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+ 
+
+  <ItemGroup>
+    <Content Include="appsettings.production.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="appsettings.development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="appsettings.qa.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Franey.BehaviorService.Libraries\Franey.BehaviorPatternStrat.Net\Franey.BPS.Net.csproj" />
+    <ProjectReference Include="..\..\Franey.BehaviorService.Libraries\Franey.BPUL.Net\Franey.BPUL.Net.csproj" />
+    <ProjectReference Include="..\..\Franey.BehaviorService.Libraries\Franey.PatternInjector.Net\Franey.PatternInjector.Net.csproj" />
+    <ProjectReference Include="..\..\Franey.BehaviorServiceExamples\ColorChainServiceAsync\ColorAnalizerCorServiceAsync.csproj" />
+    <ProjectReference Include="..\..\Franey.BehaviorServiceExamples\ColorChainService\ColorAnalizerCorService.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
