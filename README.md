@@ -12,33 +12,31 @@ Franey.DynamicPatternInjector.NET (Behavior Pattern Library IOC Injector )
 &nbsp;
 &nbsp;
 
-<pre>
-This Frameowke allows .Net Core developers to Apply Behavior patterns of
- Chain or Responsibility (COR) or my Concurrent Responsiblity Pattern (CRP).
 
-<b>using the Strategy Execute Pattern and an internal Factory Pattern to allow 
-lazy injection of actual service (unit of work class).</b>
+## * Summary *
+<pre>
+   This Frameowke allows .Net Core developers to Apply Behavior patterns of
+   Chain or Responsibility (COR) or my Concurrent Responsiblity Pattern (CRP)
+   using the Strategy Execute Pattern and an internal Factory Pattern to allow 
+   lazy injection of actual service (unit of work class).
+   
+   You can now apply old school behavior pattern using the latest SOLID 
+   and DI designs of current development practices. 
 </pre>
 &nbsp;
-### This framework also forces the use of default factories to avoid unmanaged logic in chain or CRP
-
-&nbsp;
-&nbsp;
 &nbsp;
 
+## * Benefits  *
+<pre>
+ 1) This framework forces the use of default factories to avoid unmanaged logic in chain or CRP
+ 2) This framework is designed for easy DI registraton using .NET Dependency Injection Framework, 
+    which allows all patterns to follow same lifetime and Packet (request record).
 
-## This framework is design for easy DI registraton using .NET Dependency Injection Framework, 
-##   which allows all patterns to follow same lifetime and Packet (request record).
+     ### Note: SOLID and Microservice style practices still matter , and do not allow the chain to be large 
+              nor allow serial API calls that is an anti-pattern.
 
-&nbsp;
-&nbsp;
-### You can now apply old school behavior pattern using the latest SOLID 
-###     and DI designs of current development practices. 
-&nbsp;
-### Note: SOLID and Microservice style practices still matter , and do not allow the chain to be large 
-###     nor allow serial API calls that is an anti-pattern.
+<pre>
 
-&nbsp;
 &nbsp;
 &nbsp;
 &nbsp;
