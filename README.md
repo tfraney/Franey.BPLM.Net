@@ -34,8 +34,7 @@ Franey.DynamicPatternInjector.NET (Behavior Pattern Library IOC Injector )
 
      ### Note: SOLID and Microservice style practices still matter , and do not allow the chain to be large 
               nor allow serial API calls that is an anti-pattern.
-
-<pre>
+</pre>
 
 &nbsp;
 &nbsp;
