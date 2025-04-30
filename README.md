@@ -4,34 +4,39 @@
 
 
 ## * List of libraries included *
-### Franey.BPUL.NET (Franey Behavior Pattern Unit Library) 
-### Franey.BehaviorPatternStrat.NET (Behavior Pattern Strategies, Factories, and Unit Services)
-### Franey.DynamicPatternInjector.NET (Behavior Pattern Library IOC Injector )
+<pre>
+Franey.BPUL.NET (Franey Behavior Pattern Unit Library) 
+Franey.BehaviorPatternStrat.NET (Behavior Pattern Strategies, Factories, and Unit Services)
+Franey.DynamicPatternInjector.NET (Behavior Pattern Library IOC Injector )
+</pre>
 &nbsp;
 &nbsp;
 
-### This Frameowke allows .Net Core developers to Apply Behavior patterns of
-###  Chain or Responsibility (COR) or my Concurrent Responsiblity Pattern (CRP).
+<pre>
+This Frameowke allows .Net Core developers to Apply Behavior patterns of
+ Chain or Responsibility (COR) or my Concurrent Responsiblity Pattern (CRP).
+
+<b>using the Strategy Execute Pattern and an internal Factory Pattern to allow 
+lazy injection of actual service (unit of work class).</b>
+</pre>
 &nbsp;
-### using the Strategy Execute Pattern and an internal Factory Pattern to allow 
-###  lazy injection of actual service (unit of work class).
-&nbsp;
-### This systm also forces the use of default factories to avoid unmanaged logic in chain or CRP
+### This framework also forces the use of default factories to avoid unmanaged logic in chain or CRP
 
 &nbsp;
 &nbsp;
+&nbsp;
 
 
-### This framework is design for easy DI registraton using .NET Dependency Injection Framework, 
-###   which allows all patterns to follow same lifetime and Packet (request record).
+## This framework is design for easy DI registraton using .NET Dependency Injection Framework, 
+##   which allows all patterns to follow same lifetime and Packet (request record).
 
 &nbsp;
 &nbsp;
-## You can now apply old school behavior pattern using the latest SOLID 
-##     and DI designs of current development practices. 
+### You can now apply old school behavior pattern using the latest SOLID 
+###     and DI designs of current development practices. 
 &nbsp;
-## Note: SOLID and Microservice style practices still matter , and do not allow the chain to be large 
-##     nor allow serial API calls that is an anti-pattern.
+### Note: SOLID and Microservice style practices still matter , and do not allow the chain to be large 
+###     nor allow serial API calls that is an anti-pattern.
 
 &nbsp;
 &nbsp;
