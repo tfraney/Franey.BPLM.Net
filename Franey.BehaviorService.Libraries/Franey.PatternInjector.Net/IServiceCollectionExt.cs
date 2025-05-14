@@ -14,12 +14,12 @@ public interface IServiceCollection<TPacket>
     IServiceCollection ToServices { get; }
 
     IServiceCollection<TPacket> AddAnotherStrategy<TNewStrategy, TNewDefaultFactory>()
-        where TNewStrategy : ChainStrategyProvider<TPacket>
+        where TNewStrategy : BaseStrategyProvider<TPacket>
         where TNewDefaultFactory : DefaultFactoryUnit<TPacket, ServiceUnit<TPacket>>;
     IServiceCollection<TPacket> AddAnotherStrategy<TNewStrategy>()
-        where TNewStrategy : ChainStrategyProvider<TPacket>;
+        where TNewStrategy : BaseStrategyProvider<TPacket>;
 
     IServiceCollection<TPacket> ThenToUnitOfWork<TUow, TUnitChain>()
         where TUow : ServiceUnit<TPacket>
-        where TUnitChain : ChainFactoryUnit<TPacket, TUow>;
+        where TUnitChain : BaseFactoryUnit<TPacket, TUow>;
 }

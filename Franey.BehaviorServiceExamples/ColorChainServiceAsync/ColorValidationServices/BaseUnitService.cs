@@ -1,4 +1,5 @@
-﻿using Franey.BPUL.Net;
+﻿using System.Security.Cryptography.X509Certificates;
+using Franey.BPUL.Net;
 using Microsoft.Extensions.Logging;
 
 namespace ColorAnalizerCorServiceAsync.ColorValidationServices;
@@ -9,21 +10,28 @@ public abstract class BaseUnitServiceAsync(ILogger<BaseUnitServiceAsync> logger)
 
     public override async Task<ColorPacket> ExecuteAsync(ColorPacket packet)
     {
-        return await Task.Run(() =>
+        await Task.Delay(20).ConfigureAwait(false);
+        var a = await Task.Run(() =>
         {
-
-
-            if (packet.Response == null)
+            var x = 0;
+            for (var g = 0; g <= 300; g++)
             {
-                var msg = $"{Message()}{packet.Code}{Verbiage.Comma}{packet.Name}{Verbiage.Eol}";
-                packet.CreateResponse(true, msg, Codes.Ok);
+                x = new Random(4).Next(g);
             }
-            else
-                packet.Response.Message =
-                    $"{packet.Response.Message}{Message()}{packet.Code}{Verbiage.Comma}{packet.Name}{Verbiage.Eol}";
 
-            return packet;
+            return x;
+        }).ConfigureAwait(false); 
+  
+        
+        var msg = $"{Message()}{packet.Code}-{a}: {Verbiage.Comma}{packet.Name}{Verbiage.Eol}";
+        if (packet.Response == null)
+        {
+            packet.CreateResponse(true, msg, Codes.Ok);
+        }
+        else packet.Response.Message = msg;
 
-        }).ConfigureAwait(false);
+        return packet;
+
+
     }
 }

@@ -13,6 +13,7 @@ public class CoolColorFactoryAsync(ILogger<CoolColorFactoryAsync> logger, Lazy<C
     }
 }
 
+
 public class CoolColorTransientFactoryAsync(
     ILogger<CoolColorTransientFactoryAsync> logger,
     Lazy<CoolUnitTransientServiceAsync> unitOfWork, NotAllColorsTransientFactoryAsync def) :
@@ -29,6 +30,45 @@ public class CoolColorScopedFactoryAsync(
     Lazy<CoolUnitScopedServiceAsync> unitOfWork, NotAllColorsScopedFactoryAsync def) :
     ChainFactoryUnit<ColorPacket, CoolUnitScopedServiceAsync>(logger, unitOfWork, def)
 {
+    public override bool FactoryRule(ColorPacket packet)
+    {
+        return packet.Temperature == Temperature.Cool;
+    }
+}
+
+
+public class CoolColorFactoryConcurrent(ILogger<CoolColorFactoryConcurrent> logger, Lazy<CoolUnitServiceAsync> unitOfWork) :
+    ConcurrentFactoryUnit<ColorPacket, CoolUnitServiceAsync>(logger, unitOfWork)
+{
+    public override int Priority => 0;
+
+    public override bool FactoryRule(ColorPacket packet)
+    {
+        return packet.Temperature == Temperature.Cool;
+    }
+}
+
+
+public class CoolColorTransientFactoryConcurrent(
+    ILogger<CoolColorTransientFactoryConcurrent> logger,
+    Lazy<CoolUnitTransientServiceAsync> unitOfWork) :
+    ConcurrentFactoryUnit<ColorPacket, CoolUnitTransientServiceAsync>(logger, unitOfWork)
+{
+    public override int Priority => 0;
+
+    public override bool FactoryRule(ColorPacket packet)
+    {
+        return packet.Temperature == Temperature.Cool;
+    }
+}
+
+public class CoolColorScopedFactoryConcurrent(
+    ILogger<CoolColorScopedFactoryConcurrent> logger,
+    Lazy<CoolUnitScopedServiceAsync> unitOfWork) :
+    ConcurrentFactoryUnit<ColorPacket, CoolUnitScopedServiceAsync>(logger, unitOfWork)
+{
+    public override int Priority => 0;
+
     public override bool FactoryRule(ColorPacket packet)
     {
         return packet.Temperature == Temperature.Cool;

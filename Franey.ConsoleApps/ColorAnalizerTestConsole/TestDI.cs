@@ -42,11 +42,11 @@ public class TestChainColors : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public void PerformTest(IServiceProvider hostProvider, bool detail, char dimode)
+    public void PerformTest(IServiceProvider hostProvider, bool detail, int dimode)
     {
         switch (dimode)
         {
-            case '1':
+            case 1:
             {
                 //set up for singleton
                 _singlestrategy ??= hostProvider.GetRequiredService<SingleColorStrategyProvider>();
@@ -56,7 +56,7 @@ public class TestChainColors : IDisposable
                 ExecuteTests(detail, _singlestrategy, _anystrategy, _allstrategy);
                 break;
             }
-            case '2':
+            case 2:
             {
                 using var singlestrategy = hostProvider.GetRequiredService<SingleColorStrategyProviderScoped>();
                 using var anystrategy = hostProvider.GetRequiredService<AnyStrategyProviderScoped>();
@@ -94,10 +94,10 @@ public class TestChainColors : IDisposable
         {
             Console.WriteLine(@"Test Standard Colors (silent memory test)");
 
-            for (var gg = 0; gg <= 49; gg++)
+            for (var gg = 0; gg <= 29; gg++)
             {
                 var start = DateTime.Now;
-                for (var g = 0; g <= 299; g++)
+                for (var g = 0; g <= 3; g++)
                 {
                     TestColor(singlestrategy, string.Empty, true);
                     TestColor(anystrategy, string.Empty, true);
@@ -105,7 +105,7 @@ public class TestChainColors : IDisposable
                 }
 
                 Console.WriteLine($"Completed {gg + 1} - {DateTime.Now.Subtract(start).TotalSeconds} seconds");
-                Task.Delay(200).Wait();
+                Task.Delay(400).Wait();
             }
         }
     }

@@ -24,9 +24,9 @@ try
         if (!exit)
         {
             var asyn = ' ';
-            while (asyn != '1' && asyn != '2')
+            while (asyn != '1' && asyn != '2' && asyn != '3')
             {
-                Console.Write("\nselect 1) Standard sync or   2) async/await: ");
+                Console.Write("\nselect 1) Standard sync or   2) async/await  or  3) Async Concurrent : ");
                 asyn = Console.ReadKey().KeyChar;
             }
 
@@ -40,10 +40,11 @@ try
 
             Console.WriteLine();
 
+            var mode = dimode - '1' + 1;
             if (asyn == '1')
-                RunTests(test, host.Services, testMode, dimode);
+                RunTests(test, host.Services, testMode, mode);
             else
-                await RunTestsAsync(test2, host.Services, testMode, dimode).ConfigureAwait(false);
+                await RunTestsAsync(test2, host.Services, testMode, mode + (asyn == '3'? 3: 0)).ConfigureAwait(false);
             Console.WriteLine();
         }
         else
@@ -53,10 +54,6 @@ try
             exit = true;
         }
     }
-
-    Console.WriteLine("Closing APP and disposing singletons");
-    Console.ReadKey();
-
 }
 catch (Exception x)
 {
@@ -67,13 +64,13 @@ catch (Exception x)
 
 return;
 
-static async Task RunTestsAsync(TestChainColorsAsync? test, IServiceProvider host, char detailed, char dimode)
+static async Task RunTestsAsync(TestChainColorsAsync? test, IServiceProvider host, char detailed, int dimode)
 {
     test ??= new TestChainColorsAsync();
     await test.PerformTestAsync(host, detailed is '1',dimode).ConfigureAwait(false);
 }
 
-static void RunTests(TestChainColors? test, IServiceProvider host, char detailed, char dimode)
+static void RunTests(TestChainColors? test, IServiceProvider host, char detailed, int dimode)
 {
     test ??= new TestChainColors();
     test.PerformTest(host, detailed is '1',dimode);

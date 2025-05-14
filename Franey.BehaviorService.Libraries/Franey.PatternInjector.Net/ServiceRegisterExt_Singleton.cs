@@ -12,7 +12,7 @@ public static class ServiceRegisterExtSingleton
     public static IServiceCollection<TPacket> AddStrategyAsSingleton<TPacket, TStrategy, TDefaultFactory>(
         this IServiceCollection services)
         where TPacket : IPacket
-        where TStrategy : ChainStrategyProvider<TPacket>
+        where TStrategy : BaseStrategyProvider<TPacket>
         where TDefaultFactory : DefaultFactoryUnit<TPacket, ServiceUnit<TPacket>>
     {
         return new ServiceCollectionSingleton<TPacket, TStrategy, TDefaultFactory>(services);
@@ -21,8 +21,10 @@ public static class ServiceRegisterExtSingleton
     public static IServiceCollection<TPacket> AddStrategyAsSingleton<TPacket, TStrategy>(
         this IServiceCollection services)
         where TPacket : IPacket
-        where TStrategy : ChainStrategyProvider<TPacket>
+        where TStrategy : BaseStrategyProvider<TPacket>
     {
         return new ServiceCollectionSingleton<TPacket, TStrategy>(services);
     }
+
+
 }

@@ -13,6 +13,7 @@ public class RedColorFactoryAsync(ILogger<RedColorFactoryAsync> logger, Lazy<Red
     }
 }
 
+
 public class RedColorTransientFactoryAsync(
     ILogger<RedColorTransientFactoryAsync> logger,
     Lazy<RedUnitTransientServiceAsync> unitOfWork, BlueColorTransientFactoryAsync next)
@@ -26,7 +27,8 @@ public class RedColorTransientFactoryAsync(
 
 public class RedColorScopedFactoryAsync(
     ILogger<RedColorScopedFactoryAsync> logger,
-    Lazy<RedUnitScopedServiceAsync> unitOfWork, BlueColorScopedFactoryAsync next)
+    Lazy<RedUnitScopedServiceAsync> unitOfWork,
+    BlueColorScopedFactoryAsync next)
     : ChainFactoryUnit<ColorPacket, RedUnitScopedServiceAsync>(logger, unitOfWork, next)
 {
     public override bool FactoryRule(ColorPacket packet)
@@ -34,3 +36,48 @@ public class RedColorScopedFactoryAsync(
         return packet.Name == PrimaryColors.Red;
     }
 }
+
+
+
+public class RedColorFactoryConcurrent(ILogger<RedColorFactoryConcurrent> logger, Lazy<RedUnitServiceAsync> unitOfWork) :
+    ConcurrentFactoryUnit<ColorPacket, RedUnitServiceAsync>(logger, unitOfWork)
+{
+    public override int Priority => 4;
+
+    public override bool FactoryRule(ColorPacket packet)
+    {
+        return packet.Name == PrimaryColors.Red;
+    }
+}
+
+
+public class RedColorTransientFactoryConcurrent(
+    ILogger<RedColorTransientFactoryConcurrent> logger,
+    Lazy<RedUnitTransientServiceAsync> unitOfWork) :
+    ConcurrentFactoryUnit<ColorPacket, RedUnitTransientServiceAsync>(logger, unitOfWork)
+{
+    public override int Priority => 4;
+
+    public override bool FactoryRule(ColorPacket packet)
+    {
+        return packet.Name == PrimaryColors.Red;
+    }
+}
+
+public class RedColorScopedFactoryConcurrent(
+    ILogger<RedColorScopedFactoryConcurrent> logger,
+    Lazy<RedUnitScopedServiceAsync> unitOfWork) :
+    ConcurrentFactoryUnit<ColorPacket, RedUnitScopedServiceAsync>(logger, unitOfWork)
+{
+    public override int Priority => 4;
+
+    public override bool FactoryRule(ColorPacket packet)
+    {
+        return packet.Name == PrimaryColors.Red;
+    }
+}
+
+
+
+
+

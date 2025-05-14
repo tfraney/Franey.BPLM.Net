@@ -12,14 +12,14 @@ public static class ServiceRegisterExtScoped
     public static IServiceCollection<TPacket> AddStrategyAsScoped<TPacket, TStrategy, TDefaultFactory>(
         this IServiceCollection services)
         where TPacket : IPacket
-        where TStrategy : ChainStrategyProvider<TPacket>
+        where TStrategy : BaseStrategyProvider<TPacket>
         where TDefaultFactory : DefaultFactoryUnit<TPacket, ServiceUnit<TPacket>>
     {
         return new ServiceCollectionScoped<TPacket, TStrategy, TDefaultFactory>(services);
     } public static IServiceCollection<TPacket> AddStrategyAsScoped<TPacket, TStrategy>(
         this IServiceCollection services)
         where TPacket : IPacket
-        where TStrategy : ChainStrategyProvider<TPacket>
+        where TStrategy : BaseStrategyProvider<TPacket>
     {
         return new ServiceCollectionScoped<TPacket, TStrategy>(services);
     }

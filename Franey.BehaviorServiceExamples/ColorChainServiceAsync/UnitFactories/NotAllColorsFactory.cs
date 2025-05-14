@@ -14,9 +14,11 @@ public abstract class BaseNotAllColorsFactoryAsync(ILogger<BaseNotAllColorsFacto
 
     public override bool FactoryRule(ColorPacket packet)
     {
-        return packet.Response is { Response: Codes.FullChainNotSatisified, Message: "" };
+        return packet.Response is { Response: Codes.FullChainNotSatisified };
     }
 }
+
+
 
 public class NotAllColorsFactoryAsync(ILogger<NotAllColorsFactoryAsync> logger, NoSingleColorFactoryAsync nextdef)
     : BaseNotAllColorsFactoryAsync(logger, nextdef);

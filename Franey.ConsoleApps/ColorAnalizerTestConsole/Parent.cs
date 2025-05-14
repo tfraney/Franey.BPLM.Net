@@ -47,6 +47,9 @@ public static class Parent
                 RegisterStrategyWithColorChainFactoriesAsSingletonAsync(services);
                 RegisterStrategyWithColorChainFactoriesAsScopeAsync(services);
                 RegisterStrategyWithColorChainFactoriesAsTransientAsync(services);
+                RegisterStrategyWithColorChainFactoriesAsSingletonConcurrent(services);
+                RegisterStrategyWithColorChainFactoriesAsScopedConcurrent(services);
+                RegisterStrategyWithColorChainFactoriesAsTransientConcurrent(services);
             });
     }
 
@@ -60,6 +63,41 @@ public static class Parent
             .ThenToUnitOfWork<GreenUnitServiceAsync, GreenColorFactoryAsync>()
             .ThenToUnitOfWork<HotUnitServiceAsync, HotColorFactoryAsync>()
             .ThenToUnitOfWork<CoolUnitServiceAsync, CoolColorFactoryAsync>();
+    }
+
+    public static void RegisterStrategyWithColorChainFactoriesAsSingletonConcurrent(IServiceCollection services)
+    {
+        services.AddStrategyAsSingleton<ColorPacket, AnyStrategyProviderConcurrent, NoSingleColorFactoryAsync>()
+            .AddAnotherStrategy<AllStrategyProviderConcurrent, NotAllColorsFactoryAsync>()
+            .AddAnotherStrategy<SingleStrategyProviderConcurrent>()
+            .ThenToUnitOfWork<RedUnitServiceAsync, RedColorFactoryConcurrent>()
+            .ThenToUnitOfWork<BlueUnitServiceAsync, BlueColorFactoryConcurrent>()
+            .ThenToUnitOfWork<GreenUnitServiceAsync, GreenColorFactoryConcurrent>()
+            .ThenToUnitOfWork<HotUnitServiceAsync, HotColorFactoryConcurrent>()
+            .ThenToUnitOfWork<CoolUnitServiceAsync, CoolColorFactoryConcurrent>();
+    }
+    public static void RegisterStrategyWithColorChainFactoriesAsTransientConcurrent(IServiceCollection services)
+    {
+        services.AddStrategyAsSingleton<ColorPacket, AnyStrategyProviderTransientConcurrent, NoSingleColorFactoryAsync>()
+            .AddAnotherStrategy<AllStrategyProviderTransientConcurrent, NotAllColorsFactoryAsync>()
+            .AddAnotherStrategy<SingleStrategyProviderTransientConcurrent>()
+            .ThenToUnitOfWork<RedUnitTransientServiceAsync, RedColorTransientFactoryConcurrent>()
+            .ThenToUnitOfWork<BlueUnitTransientServiceAsync, BlueColorTransientFactoryConcurrent>()
+            .ThenToUnitOfWork<GreenUnitTransientServiceAsync, GreenColorTransientFactoryConcurrent>()
+            .ThenToUnitOfWork<HotUnitTransientServiceAsync, HotColorTransientFactoryConcurrent>()
+            .ThenToUnitOfWork<CoolUnitTransientServiceAsync, CoolColorTransientFactoryConcurrent>();
+    }
+
+    public static void RegisterStrategyWithColorChainFactoriesAsScopedConcurrent(IServiceCollection services)
+    {
+        services.AddStrategyAsSingleton<ColorPacket, AnyStrategyProviderScopedConcurrent, NoSingleColorFactoryAsync>()
+            .AddAnotherStrategy<AllStrategyProviderScopedConcurrent, NotAllColorsFactoryAsync>()
+            .AddAnotherStrategy<SingleStrategyProviderScopedConcurrent>()
+            .ThenToUnitOfWork<RedUnitScopedServiceAsync, RedColorScopedFactoryConcurrent>()
+            .ThenToUnitOfWork<BlueUnitScopedServiceAsync, BlueColorScopedFactoryConcurrent>()
+            .ThenToUnitOfWork<GreenUnitScopedServiceAsync, GreenColorScopedFactoryConcurrent>()
+            .ThenToUnitOfWork<HotUnitScopedServiceAsync, HotColorScopedFactoryConcurrent>()
+            .ThenToUnitOfWork<CoolUnitScopedServiceAsync, CoolColorScopedFactoryConcurrent>();
     }
 
 

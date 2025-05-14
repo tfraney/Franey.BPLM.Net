@@ -12,7 +12,7 @@ public static class ServiceRegisterExtTransient
     public static IServiceCollection<TPacket> AddStrategyAsTransient<TPacket, TStrategy, TDefaultFactory>(
         this IServiceCollection services)
         where TPacket : IPacket
-        where TStrategy : ChainStrategyProvider<TPacket>
+        where TStrategy : BaseStrategyProvider<TPacket>
         where TDefaultFactory : DefaultFactoryUnit<TPacket, ServiceUnit<TPacket>>
     {
         return new ServiceCollectionTransient<TPacket, TStrategy, TDefaultFactory>(services);
@@ -21,7 +21,7 @@ public static class ServiceRegisterExtTransient
     public static IServiceCollection<TPacket> AddStrategyAsTransient<TPacket, TStrategy>(
         this IServiceCollection services)
         where TPacket : IPacket
-        where TStrategy : ChainStrategyProvider<TPacket>
+        where TStrategy : BaseStrategyProvider<TPacket>
     {
         return new ServiceCollectionTransient<TPacket, TStrategy>(services);
     }

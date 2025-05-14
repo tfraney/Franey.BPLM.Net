@@ -10,6 +10,7 @@ public class BaseHotUnitServiceAsync(ILogger<BaseHotUnitServiceAsync> logger) : 
     }
 }
 
+
 public class HotUnitServiceAsync(ILogger<HotUnitServiceAsync> logger)
     : BaseHotUnitServiceAsync(logger);
 

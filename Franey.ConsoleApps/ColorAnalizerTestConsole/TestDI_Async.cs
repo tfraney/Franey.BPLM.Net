@@ -14,6 +14,10 @@ public class TestChainColorsAsync : IDisposable
     private AnyStrategyProviderAsync? _anystrategy = null;
     private AllStrategyProviderAsync? _allstrategy = null;
 
+    private SingleStrategyProviderConcurrent? _singlestrategy2 = null;
+    private AnyStrategyProviderConcurrent? _anystrategy2 = null;
+    private AllStrategyProviderConcurrent? _allstrategy2 = null;
+
     private List<ColorPacket> Requests { get; } =
     [
         new()
@@ -41,24 +45,48 @@ public class TestChainColorsAsync : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public async Task PerformTestAsync(IServiceProvider hostProvider, bool detail, char dimode)
+    public async Task PerformTestAsync(IServiceProvider hostProvider, bool detail, int dimode)
     {
         switch (dimode)
         {
-            case '1':
+            case 4:
+            {
+                _singlestrategy2 ??= hostProvider.GetRequiredService<SingleStrategyProviderConcurrent>();
+                _anystrategy2 ??= hostProvider.GetRequiredService<AnyStrategyProviderConcurrent>();
+                _allstrategy2 ??= hostProvider.GetRequiredService<AllStrategyProviderConcurrent>();
+                await ExecuteTests(detail, _singlestrategy2, _anystrategy2, _allstrategy2, dimode).ConfigureAwait(false);
+                break;
+            }
+            case 5:
+            {
+                using var singlestrategy = hostProvider.GetRequiredService<SingleStrategyProviderScopedConcurrent>();
+                using var anystrategy = hostProvider.GetRequiredService<AnyStrategyProviderScopedConcurrent>();
+                using var allstrategy = hostProvider.GetRequiredService<AllStrategyProviderScopedConcurrent>();
+                await ExecuteTests(detail, singlestrategy, anystrategy, allstrategy, dimode).ConfigureAwait(false);
+                break;
+                }
+            case 6:
+            {
+                using var singlestrategy = hostProvider.GetRequiredService<SingleStrategyProviderTransientConcurrent>();
+                using var anystrategy = hostProvider.GetRequiredService<AnyStrategyProviderTransientConcurrent>();
+                using var allstrategy = hostProvider.GetRequiredService<AllStrategyProviderTransientConcurrent>();
+                await ExecuteTests(detail, singlestrategy, anystrategy, allstrategy, dimode).ConfigureAwait(false);
+                break;
+                }
+            case 1:
             {
                 _singlestrategy ??= hostProvider.GetRequiredService<SingleColorStrategyProviderAsync>();
                 _anystrategy ??= hostProvider.GetRequiredService<AnyStrategyProviderAsync>();
                 _allstrategy ??= hostProvider.GetRequiredService<AllStrategyProviderAsync>();
-                await ExecuteTests(detail, _singlestrategy, _anystrategy, _allstrategy).ConfigureAwait(false);
+                await ExecuteTests(detail, _singlestrategy, _anystrategy, _allstrategy, dimode).ConfigureAwait(false);
                 break;
             }
-            case '2':
+            case 2:
             {
                 using var singlestrategy = hostProvider.GetRequiredService<SingleColorStrategyProviderScopedAsync>();
                 using var anystrategy = hostProvider.GetRequiredService<AnyStrategyProviderScopedAsync>();
                 using var allstrategy = hostProvider.GetRequiredService<AllStrategyProviderScopedAsync>();
-                await ExecuteTests(detail, singlestrategy, anystrategy, allstrategy).ConfigureAwait(false);
+                await ExecuteTests(detail, singlestrategy, anystrategy, allstrategy, dimode).ConfigureAwait(false);
                 break;
             }
             default:
@@ -66,19 +94,19 @@ public class TestChainColorsAsync : IDisposable
                 using var singlestrategy = hostProvider.GetRequiredService<SingleColorStrategyProviderTransientAsync>();
                 using var anystrategy = hostProvider.GetRequiredService<AnyStrategyProviderTransientAsync>();
                 using var allstrategy = hostProvider.GetRequiredService<AllStrategyProviderTransientAsync>();
-                await ExecuteTests(detail, singlestrategy, anystrategy, allstrategy).ConfigureAwait(false);
+                await ExecuteTests(detail, singlestrategy, anystrategy, allstrategy, dimode).ConfigureAwait(false);
                 break;
             }
         }
     }
 
     private async Task ExecuteTests(bool detail, IStrategyProvider<ColorPacket> singlestrategy,
-        IStrategyProvider<ColorPacket> anystrategy, IStrategyProvider<ColorPacket> allstrategy)
+        IStrategyProvider<ColorPacket> anystrategy, IStrategyProvider<ColorPacket> allstrategy, int mode)
     {
         if (detail)
         {
             var start = DateTime.Now;
-            Console.WriteLine(@"Test Async Colors (text)");
+            Console.WriteLine($"Test {(mode > 3 ? "Concurrent":"Async")} Colors (text)");
 
             await TestColorAsync(singlestrategy, @"Testing (Async) with Single (First Matched) color in chain rule.",
                 false).ConfigureAwait(false);
@@ -90,20 +118,21 @@ public class TestChainColorsAsync : IDisposable
         }
         else
         {
-            Console.WriteLine(@"Test  Async Colors (silent memory test)");
+            Console.WriteLine($"Test {(mode > 3 ? "Concurrent" : "Async")} Colors (silent memory test)");
 
-            for (var gg = 0; gg <= 49; gg++)
+            for (var gg = 0; gg <= 29; gg++)
             {
                 var start = DateTime.Now;
-                for (var g = 0; g <= 299; g++)
+                for (var g = 0; g <= 3; g++)
                 {
+
                     await TestColorAsync(singlestrategy, string.Empty, true).ConfigureAwait(false);
                     await TestColorAsync(anystrategy, string.Empty, true).ConfigureAwait(false);
                     await TestColorAsync(allstrategy, string.Empty, true).ConfigureAwait(false);
                 }
 
                 Console.WriteLine($"Completed {gg + 1} - {DateTime.Now.Subtract(start).TotalSeconds} seconds");
-                await Task.Delay(200).ConfigureAwait(false);
+                await Task.Delay(400).ConfigureAwait(false);
             }
         }
     }
@@ -125,7 +154,7 @@ public class TestChainColorsAsync : IDisposable
                     resp?.Message ?? resp?.Error ?? string.Empty);
         }
     }
-
+    
     protected virtual void Dispose(bool disposing)
     {
         if (_disposedValue) return;
@@ -136,6 +165,9 @@ public class TestChainColorsAsync : IDisposable
             _allstrategy?.Dispose();
             _anystrategy?.Dispose();
             _singlestrategy?.Dispose();
+            _allstrategy2?.Dispose();
+            _anystrategy2?.Dispose();
+            _singlestrategy2?.Dispose();
 
         }
         _disposedValue = true;

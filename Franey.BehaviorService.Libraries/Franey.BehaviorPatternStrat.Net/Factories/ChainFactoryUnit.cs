@@ -7,17 +7,19 @@ namespace Franey.BPS.Net.Factories;
 
 public abstract class ChainFactoryUnit<T, TFunc>(ILogger logger, Lazy<TFunc> unitOfWork, IFactoryUnit<T>? nextUnit = null) :
 #pragma warning disable CS9107 
-    FactoryUnit<T, TFunc>(logger, Verbiage.TypeChainfactory, unitOfWork)
+    BaseFactoryUnit<T, TFunc>(logger, Verbiage.TypeChainfactory, unitOfWork), IFactoryUnit<T>
 #pragma warning restore CS9107 
     where T : IPacket
     where TFunc :ServiceUnit<T>
 {
-   
-    public override async Task<T> ProcessRequestAsync(T packet, ChainStrategyMode strategyMode)
+    public override int Priority => 0;
+
+    public async Task<T> ProcessRequestAsync(T packet, ChainStrategyMode strategyMode)
     {
         if (ValidatePacketForFailure(packet) && FactoryRule(packet))
         {
-            packet = await unitOfWork.Value.ExecuteAsync(packet).ConfigureAwait(false);
+            
+            packet = UnitOfWork != null ? await UnitOfWork.Value.ExecuteAsync(packet).ConfigureAwait(false) : packet;
 
             if (packet.Response == null)
             {
@@ -32,21 +34,27 @@ public abstract class ChainFactoryUnit<T, TFunc>(ILogger logger, Lazy<TFunc> uni
         else if (strategyMode == ChainStrategyMode.FullDecoratorChainResponsibility &&
                  ValidatePacketForFailure(packet))
         {
-            packet.CreateResponse(false,string.Empty, Codes.FullChainNotSatisified);
+            packet.CreateResponse(false, string.Empty, Codes.FullChainNotSatisified);
+            return packet;
         }
 
         packet = CheckIfDefaultBeforeCheckingNextUnit(packet, nextUnit);
-        return nextUnit == null ? packet :
-             await nextUnit.ProcessRequestAsync(packet, strategyMode).ConfigureAwait(false);
-            
+
+        if (packet.Response?.Error == Codes.Error) return packet;
+
+        
+        packet = nextUnit == null
+            ? packet
+            : await nextUnit.ProcessRequestAsync(packet, strategyMode).ConfigureAwait(false);
+        
+        return packet;
 
     }
-
-    public override T ProcessRequest(T packet, ChainStrategyMode strategyMode)
+    public T ProcessRequest(T packet, ChainStrategyMode strategyMode)
     {
         if (ValidatePacketForFailure(packet) && FactoryRule(packet))
         {
-            packet = unitOfWork.Value.Execute(packet);
+            packet = UnitOfWork != null? UnitOfWork.Value.Execute(packet) : packet;
 
             if (packet.Response == null)
             {
@@ -62,16 +70,24 @@ public abstract class ChainFactoryUnit<T, TFunc>(ILogger logger, Lazy<TFunc> uni
                  ValidatePacketForFailure(packet))
         {
             packet.CreateResponse(false, string.Empty, Codes.FullChainNotSatisified);
+            return packet;
         }
 
         packet = CheckIfDefaultBeforeCheckingNextUnit(packet, nextUnit);
-        return nextUnit == null ? packet : nextUnit.ProcessRequest(packet, strategyMode);
+
+        if (packet.Response?.Error == Codes.Error) return packet;
+
+  
+        packet =  nextUnit == null ? packet :
+            nextUnit.ProcessRequest(packet, strategyMode);
+       
+        return packet;
     }
     protected override void Dispose(bool disposing)
     {
         if (DisposedValue) return;
         if (!disposing) return;
-        if (unitOfWork.IsValueCreated) unitOfWork.Value.Dispose();
+        if (UnitOfWork?.IsValueCreated??false) unitOfWork.Value.Dispose();
         nextUnit?.Dispose();
         base.Dispose(disposing);
     }

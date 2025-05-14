@@ -9,11 +9,19 @@ public class ColorPacket : IPacket
     public Temperature Temperature { get; set; }
 
     public Code Code { get; set; }
+    public int Priority { get; set; }
     public IPacketResponse? Response { get; set; }
 
     public void CreateResponse(bool successful, string message, string response, string? error = null)
     {
         Response = new ColorResponse { Successful = successful, Response = response, Error = error, Message = message };
+    }
+
+    public IPacket ClonePacket()
+    {
+        
+        return new ColorPacket()
+            { Code = this.Code, Name = this.Name, Temperature = this.Temperature, Priority = this.Priority, Response = null };
     }
 }
 

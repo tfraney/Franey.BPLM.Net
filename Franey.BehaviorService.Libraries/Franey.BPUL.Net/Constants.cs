@@ -10,12 +10,14 @@
 
         public const string Entitydesc = "{type} {action}\n";
         public const string TypeChainstrategy = @"This Chain Strategy Provider";
+        public const string TypeConcurrenttrategy = @"This Concurrent Strategy Provider";
         public const string TypeUow = @"This Unit of Work";
         public const string TypeChainfactory = @"This Chain Handler";
         public const string TypeDefchainfactory = @"This Default Chain Handler";
 
         public const string Init = @"is Instantiating.";
         public const string Dispose = @"is Disposing.";
+        public const string Eol = "\n";
     }
 
     public static class Codes

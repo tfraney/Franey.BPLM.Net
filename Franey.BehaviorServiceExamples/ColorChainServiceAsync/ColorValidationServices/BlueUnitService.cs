@@ -10,6 +10,7 @@ public abstract class BaseBlueUnitServiceAsync(ILogger<BaseBlueUnitServiceAsync>
     }
 }
 
+
 public class BlueUnitServiceAsync(ILogger<BlueUnitServiceAsync> logger) :
     BaseBlueUnitServiceAsync(logger);
 

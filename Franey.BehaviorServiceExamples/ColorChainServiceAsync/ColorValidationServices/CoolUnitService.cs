@@ -10,6 +10,8 @@ public class BaseCoolUnitServiceAsync(ILogger<BaseCoolUnitServiceAsync> logger) 
     }
 }
 
+
+
 public class CoolUnitServiceAsync(ILogger<CoolUnitServiceAsync> logger)
     : BaseCoolUnitServiceAsync(logger);
 

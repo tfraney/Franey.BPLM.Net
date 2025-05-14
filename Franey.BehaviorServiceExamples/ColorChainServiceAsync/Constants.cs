@@ -27,6 +27,7 @@ public static class Verbiage
 {
     public const string Comma = @",";
     public const string Eol = "]\n";
+    public const string Bracket = "]";
     public const string DefMsg = " did not get approved in any color services..";
     public const string NotAllMsg = "must be approved by every validation services.";
 

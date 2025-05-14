@@ -13,6 +13,7 @@ public class BlueColorFactoryAsync(ILogger<BlueColorFactoryAsync> logger, Lazy<B
     }
 }
 
+
 public class BlueColorTransientFactoryAsync(
     ILogger<BlueColorTransientFactoryAsync> logger,
     Lazy<BlueUnitTransientServiceAsync> unitOfWork, GreenColorTransientFactoryAsync next) :
@@ -34,3 +35,45 @@ public class BlueColorScopedFactoryAsync(
         return packet.Name == PrimaryColors.Blue;
     }
 }
+
+
+public class BlueColorFactoryConcurrent(ILogger<BlueColorFactoryConcurrent> logger, Lazy<BlueUnitServiceAsync> unitOfWork) :
+    ConcurrentFactoryUnit<ColorPacket, BlueUnitServiceAsync>(logger, unitOfWork)
+{
+    public override int Priority => 3;
+
+    public override bool FactoryRule(ColorPacket packet)
+    {
+        return packet.Name == PrimaryColors.Blue;
+    }
+}
+
+
+public class BlueColorTransientFactoryConcurrent(
+    ILogger<BlueColorTransientFactoryConcurrent> logger,
+    Lazy<BlueUnitTransientServiceAsync> unitOfWork) :
+    ConcurrentFactoryUnit<ColorPacket, BlueUnitTransientServiceAsync>(logger, unitOfWork)
+{
+    public override int Priority => 3;
+
+    public override bool FactoryRule(ColorPacket packet)
+    {
+        return packet.Name == PrimaryColors.Blue;
+    }
+}
+
+public class BlueColorScopedFactoryConcurrent(
+    ILogger<BlueColorScopedFactoryConcurrent> logger,
+    Lazy<BlueUnitScopedServiceAsync> unitOfWork) :
+    ConcurrentFactoryUnit<ColorPacket, BlueUnitScopedServiceAsync>(logger, unitOfWork)
+{
+    public override int Priority => 3;
+
+    public override bool FactoryRule(ColorPacket packet)
+    {
+        return packet.Name == PrimaryColors.Blue;
+    }
+}
+
+
+

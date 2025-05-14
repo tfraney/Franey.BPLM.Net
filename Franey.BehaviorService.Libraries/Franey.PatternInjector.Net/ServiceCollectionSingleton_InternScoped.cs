@@ -1,5 +1,4 @@
 ﻿using Franey.BPS.Net.Factories;
-using Franey.BPS.Net.Strategies;
 using Franey.BPUL.Net;
 using Franey.BPUL.Net.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +10,7 @@ namespace Franey.PatternInjector.Net;
 
 internal class ServiceCollectionScoped<TPacket, TStrategy> : IServiceCollection<TPacket>
     where TPacket : IPacket
-    where TStrategy : ChainStrategyProvider<TPacket>
+    where TStrategy : BaseStrategyProvider<TPacket>
 {
     public ServiceCollectionScoped(IServiceCollection services)
     {
@@ -23,7 +22,7 @@ internal class ServiceCollectionScoped<TPacket, TStrategy> : IServiceCollection<
 
     public IServiceCollection<TPacket> ThenToUnitOfWork<TUow, TUnitChain>()
         where TUow : ServiceUnit<TPacket>
-        where TUnitChain : ChainFactoryUnit<TPacket, TUow>
+        where TUnitChain : BaseFactoryUnit<TPacket, TUow>
     {
         ToServices.AddScoped<ILogger<TUow>, Logger<TUow>>();
         ToServices.AddScoped<ILogger<TUnitChain>, Logger<TUnitChain>>();
@@ -37,12 +36,12 @@ internal class ServiceCollectionScoped<TPacket, TStrategy> : IServiceCollection<
     }
 
     public IServiceCollection<TPacket> AddAnotherStrategy<TNewStrategy>()
-        where TNewStrategy : ChainStrategyProvider<TPacket>
+        where TNewStrategy : BaseStrategyProvider<TPacket>
     {
         return ToServices.AddStrategyAsScoped<TPacket, TNewStrategy>();
     }
     public IServiceCollection<TPacket> AddAnotherStrategy<TNewStrategy, TNewDefaultFactory>()
-        where TNewStrategy : ChainStrategyProvider<TPacket>
+        where TNewStrategy : BaseStrategyProvider<TPacket>
         where TNewDefaultFactory : DefaultFactoryUnit<TPacket, ServiceUnit<TPacket>>
     {
         return ToServices.AddStrategyAsScoped<TPacket, TNewStrategy, TNewDefaultFactory>();
@@ -58,7 +57,7 @@ internal class ServiceCollectionScoped<TPacket, TStrategy> : IServiceCollection<
 
 internal class ServiceCollectionScoped<TPacket, TStrategy, TDefaultFactory> : IServiceCollection<TPacket>
     where TPacket : IPacket
-    where TStrategy : ChainStrategyProvider<TPacket>
+    where TStrategy : BaseStrategyProvider<TPacket>
     where TDefaultFactory : DefaultFactoryUnit<TPacket, ServiceUnit<TPacket>>
 {
     public ServiceCollectionScoped(IServiceCollection services)
@@ -71,7 +70,7 @@ internal class ServiceCollectionScoped<TPacket, TStrategy, TDefaultFactory> : IS
 
     public IServiceCollection<TPacket> ThenToUnitOfWork<TUow, TUnitChain>()
         where TUow : ServiceUnit<TPacket>
-        where TUnitChain : ChainFactoryUnit<TPacket, TUow>
+        where TUnitChain : BaseFactoryUnit<TPacket, TUow>
     {
         ToServices.AddScoped<ILogger<TUow>, Logger<TUow>>();
         ToServices.AddScoped<ILogger<TUnitChain>, Logger<TUnitChain>>();
@@ -85,13 +84,13 @@ internal class ServiceCollectionScoped<TPacket, TStrategy, TDefaultFactory> : IS
     }
 
     public IServiceCollection<TPacket> AddAnotherStrategy<TNewStrategy>()
-        where TNewStrategy : ChainStrategyProvider<TPacket>
+        where TNewStrategy : BaseStrategyProvider<TPacket>
     {
         return ToServices.AddStrategyAsScoped<TPacket, TNewStrategy>();
     }
 
     public IServiceCollection<TPacket> AddAnotherStrategy<TNewStrategy, TNewDefaultFactory>()
-        where TNewStrategy : ChainStrategyProvider<TPacket>
+        where TNewStrategy : BaseStrategyProvider<TPacket>
         where TNewDefaultFactory : DefaultFactoryUnit<TPacket, ServiceUnit<TPacket>>
     {
         return ToServices.AddStrategyAsScoped<TPacket, TNewStrategy, TNewDefaultFactory>();

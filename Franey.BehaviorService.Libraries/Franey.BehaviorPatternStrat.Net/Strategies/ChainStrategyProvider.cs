@@ -5,22 +5,11 @@ using Microsoft.Extensions.Logging;
 namespace Franey.BPS.Net.Strategies;
 
 public abstract class ChainStrategyProvider<T>(ILogger logger, IFactoryUnit<T>? startingFactory)
-    : Unit(logger, Verbiage.TypeChainstrategy), IStrategyProvider<T>
+    : BaseStrategyProvider<T>(logger, Verbiage.TypeChainstrategy)
     where T : IPacket
 {
-    public abstract ChainStrategyMode StrategyMode { get; }
-
-    public T ExecuteStrategy(T packet)
-    {
-        if (startingFactory != null) packet = startingFactory.ProcessRequest(packet, StrategyMode);
-        if (packet.Response != null) return packet;
-
-        LogWarning(Verbiage.ResponseNotimplemented);
-        packet.CreateResponse(false, string.Empty, Codes.Warning, Verbiage.ResponseNotimplemented);
-        return packet;
-    }
-
-    public async ValueTask<T> ExecuteStrategyAsync(T packet)
+   
+    public override async ValueTask<T> ExecuteStrategyAsync(T packet)
     {
         if (startingFactory != null)
             packet = await startingFactory.ProcessRequestAsync(packet, StrategyMode).ConfigureAwait(false);
@@ -32,6 +21,16 @@ public abstract class ChainStrategyProvider<T>(ILogger logger, IFactoryUnit<T>? 
         return packet;
     }
 
+    public override T ExecuteStrategy(T packet)
+    {
+        if (startingFactory != null) packet = startingFactory.ProcessRequest(packet, StrategyMode);
+        if (packet.Response != null) return packet;
+
+        LogWarning(Verbiage.ResponseNotimplemented);
+        packet.CreateResponse(false, string.Empty, Codes.Warning, Verbiage.ResponseNotimplemented);
+        return packet;
+    }
+  
     protected override void Dispose(bool disposing)
     {
         if (DisposedValue) return;

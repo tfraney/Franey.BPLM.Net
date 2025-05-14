@@ -9,7 +9,7 @@ namespace Franey.PatternInjector.Net;
 
 internal class ServiceCollectionSingleton<TPacket, TStrategy> : IServiceCollection<TPacket>
     where TPacket : IPacket
-    where TStrategy : ChainStrategyProvider<TPacket>
+    where TStrategy : BaseStrategyProvider<TPacket>
 {
     public ServiceCollectionSingleton(IServiceCollection services)
     {
@@ -21,7 +21,7 @@ internal class ServiceCollectionSingleton<TPacket, TStrategy> : IServiceCollecti
 
     public IServiceCollection<TPacket> ThenToUnitOfWork<TUow, TUnitChain>()
         where TUow : ServiceUnit<TPacket>
-        where TUnitChain : ChainFactoryUnit<TPacket, TUow>
+        where TUnitChain : BaseFactoryUnit<TPacket, TUow>
     {
         ToServices.AddSingleton<ILogger<TUow>, Logger<TUow>>();
         ToServices.AddSingleton<ILogger<TUnitChain>, Logger<TUnitChain>>();
@@ -35,13 +35,13 @@ internal class ServiceCollectionSingleton<TPacket, TStrategy> : IServiceCollecti
     }
 
     public IServiceCollection<TPacket> AddAnotherStrategy<TNewStrategy>()
-        where TNewStrategy : ChainStrategyProvider<TPacket>
+        where TNewStrategy : BaseStrategyProvider<TPacket>
     {
         return ToServices.AddStrategyAsSingleton<TPacket, TNewStrategy>();
     }
 
     public IServiceCollection<TPacket> AddAnotherStrategy<TNewStrategy, TNewDefaultFactory>()
-        where TNewStrategy : ChainStrategyProvider<TPacket>
+        where TNewStrategy : BaseStrategyProvider<TPacket>
         where TNewDefaultFactory : DefaultFactoryUnit<TPacket, ServiceUnit<TPacket>>
     {
         return ToServices.AddStrategyAsSingleton<TPacket, TNewStrategy, TNewDefaultFactory>();
@@ -55,7 +55,7 @@ internal class ServiceCollectionSingleton<TPacket, TStrategy> : IServiceCollecti
 }
 internal class ServiceCollectionSingleton<TPacket, TStrategy, TDefaultFactory> : IServiceCollection<TPacket>
     where TPacket : IPacket
-    where TStrategy : ChainStrategyProvider<TPacket>
+    where TStrategy : BaseStrategyProvider<TPacket>
     where TDefaultFactory : DefaultFactoryUnit<TPacket, ServiceUnit<TPacket>>
 {
     public ServiceCollectionSingleton(IServiceCollection services)
@@ -68,7 +68,7 @@ internal class ServiceCollectionSingleton<TPacket, TStrategy, TDefaultFactory> :
 
     public IServiceCollection<TPacket> ThenToUnitOfWork<TUow, TUnitChain>()
         where TUow : ServiceUnit<TPacket>
-        where TUnitChain : ChainFactoryUnit<TPacket, TUow>
+        where TUnitChain : BaseFactoryUnit<TPacket, TUow>
     {
         ToServices.AddSingleton<ILogger<TUow>, Logger<TUow>>();
         ToServices.AddSingleton<ILogger<TUnitChain>, Logger<TUnitChain>>();
@@ -82,13 +82,13 @@ internal class ServiceCollectionSingleton<TPacket, TStrategy, TDefaultFactory> :
     }
 
     public IServiceCollection<TPacket> AddAnotherStrategy<TNewStrategy>()
-        where TNewStrategy : ChainStrategyProvider<TPacket>
+        where TNewStrategy : BaseStrategyProvider<TPacket>
     {
         return ToServices.AddStrategyAsSingleton<TPacket, TNewStrategy>();
     }
 
     public IServiceCollection<TPacket> AddAnotherStrategy<TNewStrategy, TNewDefaultFactory>()
-        where TNewStrategy : ChainStrategyProvider<TPacket>
+        where TNewStrategy : BaseStrategyProvider<TPacket>
         where TNewDefaultFactory : DefaultFactoryUnit<TPacket, ServiceUnit<TPacket>>
     {
         return ToServices.AddStrategyAsSingleton<TPacket, TNewStrategy, TNewDefaultFactory>();
